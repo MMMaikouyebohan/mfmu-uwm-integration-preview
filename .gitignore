@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.DS_Store
+.idea/
+.vscode/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Scheduler runtime output
+rounds/
+schedule-result.json
+mfmu-scheduler-*/
+*.log
+
+# Never commit sealed/private experiment material
+ORDERBOOK_10K.json
+SCENARIO_AUTHORITY.json
+euclidean_geometry.npz
+*CHECKPOINT*
+*checkpoint*
+*INCIDENT*
+*RECEIPT*
+*GO*.md
+*.bundle
+*.tar
+*.tar.gz
+
