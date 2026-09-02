@@ -85,6 +85,8 @@ The returned object uses `schema_version = "mfmu.schedule-result.v1"` and contai
 - `validation`: closure, accepted/rejected counts, hard-violation count, independent replay, and dry-run/commit equality;
 - `diagnostics`: backend identity, global rounds, run seed, provenance counts, controller counters, and null-control information.
 
+The adapter sorts external UAV and request IDs before assigning internal indices, so reordering those JSON arrays does not change their canonical identities. The result also reports `port_parity_status=NOT_ESTABLISHED` and `q10000_claim_applies_to_this_run=false`: the upstream sealed result is background evidence, not automatic validation of a new custom scenario or this integration refactor.
+
 When `diagnostics.mean_field_policy_consumed_count` is zero, the schedule must not be described as a realised Mean-field-guided owner allocation.
 
 ## Proposed group boundary

@@ -72,6 +72,7 @@ def build_runtime(scenario: dict[str, Any]):
 
     fleet = scenario.get("fleet")
     _require(isinstance(fleet, list) and fleet, "fleet must contain at least one UAV")
+    fleet = sorted(fleet, key=lambda row: str(row.get("id")))
     uav_ids = [str(row.get("id")) for row in fleet]
     _require(len(set(uav_ids)) == len(uav_ids), "UAV IDs must be unique")
     uav_index = {uid: idx for idx, uid in enumerate(uav_ids)}
@@ -95,6 +96,7 @@ def build_runtime(scenario: dict[str, Any]):
 
     requests = scenario.get("requests")
     _require(isinstance(requests, list) and requests, "requests must contain at least one paired request")
+    requests = sorted(requests, key=lambda row: str(row.get("id")))
     order_ids = [str(row.get("id")) for row in requests]
     _require(len(set(order_ids)) == len(order_ids), "request IDs must be unique")
     orders = []
@@ -185,4 +187,3 @@ def build_runtime(scenario: dict[str, Any]):
     ).validate()
     maps = ScenarioMaps(tuple(station_ids), tuple(uav_ids), tuple(order_ids))
     return fx, authority, policy, maps
-

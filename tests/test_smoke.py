@@ -1,3 +1,4 @@
+import copy
 import json
 import tempfile
 import unittest
@@ -38,7 +39,15 @@ class SchedulerSmokeTest(unittest.TestCase):
         with self.assertRaises(ScenarioError):
             build_runtime(self.scenario)
 
+    def test_uav_and_request_array_order_is_canonicalised(self):
+        reordered = copy.deepcopy(self.scenario)
+        reordered["fleet"].reverse()
+        reordered["requests"].reverse()
+        with tempfile.TemporaryDirectory() as work_a, tempfile.TemporaryDirectory() as work_b:
+            result_a = schedule(self.scenario, run_seed=11, work_directory=work_a)
+            result_b = schedule(reordered, run_seed=11, work_directory=work_b)
+        self.assertEqual(result_a["assignments"], result_b["assignments"])
+
 
 if __name__ == "__main__":
     unittest.main()
-

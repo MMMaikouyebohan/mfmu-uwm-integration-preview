@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import tempfile
 import uuid
 from collections import Counter
@@ -13,8 +14,6 @@ import numpy as np
 
 from bounded_studies.r3_global_mu_v3r4_batch_judge_v3 import controller
 from bounded_studies.r3_global_mu_v3r4_batch_judge_v3 import readout
-from experiments import sh64_bat3_journey as journey
-
 from .scenario import ScenarioMaps, build_runtime
 
 
@@ -134,6 +133,9 @@ def schedule(
     """
 
     fx, authority, policy, maps = build_runtime(scenario)
+    scenario_digest = hashlib.sha256(
+        json.dumps(scenario, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
     order_ids = [int(order["order_id"]) for order in fx["orders"]]
     initial_inputs = controller.inner_inputs(fx, order_ids, {}, [], {})
     if backend == "portable_fail_closed":
@@ -182,19 +184,34 @@ def schedule(
     for record in sorted(committed["committed_records"], key=lambda row: int(row["oid"])):
         oid = int(record["oid"])
         order = fx["orders"][oid - 1]
+        provenance = scheduler.provisional[oid]["provenance"]
         assignments.append({
             "request_id": maps.order_external[oid - 1],
             "uav_id": maps.uav_external[int(record["owner"])],
             "collection_slot": int(order["k_p"]),
             "dropoff_service_slot": int(record["k_serv"]),
             "action_kind": journey_by_order[oid]["action_kind"],
+            "owner_provenance": provenance,
         })
-    provenance = Counter(row.get("provenance") for row in scheduler.provisional.values())
+    provenance_counts = Counter(row.get("provenance") for row in scheduler.provisional.values())
     return {
         "schema_version": "mfmu.schedule-result.v1",
+        "scenario_id": scenario.get("scenario_id"),
+        "implementation": {
+            "package_version": "0.1.0",
+            "derived_from_source_commit": "fa1f47994659550586748888c9d6323ac9f1fa83",
+            "port_parity_status": "NOT_ESTABLISHED",
+        },
+        "evidence_scope": {
+            "input_scope": "CUSTOM_SCENARIO_UNVALIDATED",
+            "sealed_sh64_input_match": False,
+            "q10000_port_parity_verified": False,
+            "q10000_claim_applies_to_this_run": False,
+        },
         "assignments": assignments,
         "journeys": [_external_journey(row, maps) for row in journeys_raw],
         "validation": {
+            "committable": True,
             "global_closure": True,
             "accepted": int(committed["accepted"]),
             "rejected": int(committed["rejected"]),
@@ -204,11 +221,13 @@ def schedule(
         },
         "diagnostics": {
             "backend": backend,
+            "stop_reason": stop["stop"],
             "rounds": int(stop["rounds"]),
             "run_seed": int(run_seed),
-            "mean_field_policy_consumed_count": int(provenance.get(readout.PROV_WEIGHTED, 0)),
-            "uniform_fail_closed_count": int(provenance.get(readout.PROV_UNIFORM, 0)),
-            "provenance_counts": dict(provenance),
+            "input_sha256": scenario_digest,
+            "mean_field_policy_consumed_count": int(provenance_counts.get(readout.PROV_WEIGHTED, 0)),
+            "uniform_fail_closed_count": int(provenance_counts.get(readout.PROV_UNIFORM, 0)),
+            "provenance_counts": dict(provenance_counts),
             "controller_counters": scheduler.counters,
             "null_control": null_record,
             "work_directory": str(work),
@@ -219,4 +238,3 @@ def schedule(
             ),
         },
     }
-

@@ -112,5 +112,4 @@ The lightweight test suite checks the input adapter, pair-aware readout, complet
 
 ## Provenance and use
 
-See [PROVENANCE.md](PROVENANCE.md) for the frozen source identity and the bounded namespace changes made for this repository. This repository currently has no open-source licence; see [NOTICE.md](NOTICE.md) before redistribution.
-
+See [PROVENANCE.md](PROVENANCE.md) for the frozen source identity and the bounded namespace changes made for this repository, and [LIMITATIONS.md](LIMITATIONS.md) before interpreting a result. This repository currently has no open-source licence; see [NOTICE.md](NOTICE.md) before redistribution.
