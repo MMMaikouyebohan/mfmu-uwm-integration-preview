@@ -19,7 +19,7 @@ Four flat imports in the E2 bounded-study modules were changed to package-relati
 
 The eager exports in `src/ai4pde/__init__.py` and `src/core/__init__.py` were reduced to the included dependency closure, preventing imports of unrelated planner and transit modules.
 
-Self-test fallback paths were changed from the original workstation location to a repository-relative path. The private E2 fixture loader itself is intentionally not included.
+Self-test fallback paths were changed from the original workstation location to a repository-relative path. The non-public E2 fixture loader itself is intentionally not included.
 
 No algorithmic expression, decision rule, battery rule, resource lottery, readout threshold, or closure condition was changed in those source modules.
 

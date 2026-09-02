@@ -28,5 +28,4 @@ q10000_claim_applies_to_this_run = false
 
 The available evidence does not establish global optimality, general convergence, real-time performance, production reliability, or superiority over another scheduler. It also does not establish improved service rate, journey quality, energy use, runtime, or global closure speed caused by the Mean-field Inner.
 
-Keep this repository private until the author and supervisors confirm intellectual-property, third-party-code, and licensing permissions.
-
+Public visibility is for inspection only and does not make this an open-source release. Confirm intellectual-property, third-party-code, and licensing permissions before any reuse or redistribution beyond GitHub's public-repository functionality.

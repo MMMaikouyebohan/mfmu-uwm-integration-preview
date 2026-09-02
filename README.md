@@ -1,6 +1,6 @@
 # MFMU UAV Scheduler
 
-Private research-integration preview of the **Mean-Field Multiple-Update (MFMU)** UAV scheduler for Urban World Model collaboration.
+Publicly visible research-integration preview of the **Mean-Field Multiple-Update (MFMU)** UAV scheduler for inspection and Urban World Model collaboration.
 
 The scheduler combines:
 
@@ -11,7 +11,7 @@ The scheduler combines:
 - complete collection-to-drop-off journey construction;
 - hard BatteryLedger validation, global closure checks, and independent replay.
 
-This is a clean integration snapshot, not a production release and not the full IRP experiment archive. No private Q10000 fixture, run logs, checkpoints, internal receipts, or historical Git repository are included.
+This is a clean integration snapshot, not a production release and not the full IRP experiment archive. No non-public Q10000 fixture, run logs, checkpoints, internal receipts, or historical Git repository are included.
 
 ## Quick start
 
